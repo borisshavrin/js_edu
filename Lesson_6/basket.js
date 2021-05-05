@@ -22,7 +22,7 @@ class Basket {
 
 function init() {
     drawCatalog();
-    drawBasket();
+    checkEmptyAndDrawOut();
 };
 
 
@@ -52,8 +52,6 @@ function drawCatalogProduct(product, id) {
 
 const $basketList = document.querySelector('#basket-list');
 function drawBasket() {
-    checkEmpty();
-
     $basketList.textContent = '';
     basket.forEach(function (product, i) {
         drawProduct(product, i);
@@ -62,7 +60,7 @@ function drawBasket() {
 
 
 const $basketOut = document.querySelector('#basket-out');
-function checkEmpty() {
+function checkEmptyAndDrawOut() {
     $basketOut.textContent = '';
     let basket_empty = `Корзина пуста`, empty = "basket-empty";
     let basket_filled = `В корзине: ${basket.length} товар(-ов) на сумму ${count_sum(basket)} рублей`, filled = "basket-out";
@@ -71,6 +69,8 @@ function checkEmpty() {
         // Если корзина не пуста
         empty = filled;
         basket_empty = basket_filled;
+    } else {
+        $basketListClose.style.display = "none";
     };
 
     const html =
@@ -78,6 +78,8 @@ function checkEmpty() {
             <p>${basket_empty}</p>
         </div>`
     $basketOut.insertAdjacentHTML('beforeend', html);
+
+
 };
 
 
@@ -91,12 +93,51 @@ function count_sum(basket) {
 
 
 function drawProduct(product, id) {
-    const html = `<div id="item-${id}" class="basket-item">
+    const html =
+        `<div id="item-${id}" class="basket-item">
         <p class="basket-item__title">${product.name}, цена: ${product.price}</p>
         <button data-id="${id}" class="basket-item__btn">delete</button>
-    </div>`
+    </div>`;
     $basketList.insertAdjacentHTML('beforeend', html);
 };
+
+
+// Кнопка Раскрыть корзину
+const $basketListOpen = document.querySelector('#basket-list-open');
+const $basketListClose = document.querySelector('#basket-list-close');
+const $toAddressNextBtn = document.querySelector('#basket-next-btn');
+const $popup = document.querySelector('#popup');
+$basketListOpen.addEventListener('click', function (e) {
+    if (e.target.tagName === 'BUTTON' && basket.length > 0) {
+        $basketList.style.display = "block";
+        $basketListOpen.style.display = "none";
+        $basketListClose.style.display = "block";
+        $toAddressNextBtn.style.display = 'block';
+
+        $popup.style.cssText = `
+        display: block;
+        width: 700px;
+        height: 500px;
+        background-color: #ccc;
+        border: 1px solid #999;
+        border-radius: 6px;
+        position: fixed;
+        top: 100px;
+        left: calc(50% - 350px);`;
+    };
+});
+
+
+// Кнопка Скрыть
+$basketListClose.addEventListener('click', function (e) {
+    if (e.target.tagName === 'BUTTON') {
+        $basketListOpen.style.display = "block";
+        $basketListClose.style.display = "none";
+        $basketList.style.display = "none";
+        $toAddressNextBtn.style.display = 'none';
+        $popup.style.display = 'none';
+    };
+});
 
 
 // Кнопка delete
@@ -106,6 +147,9 @@ $basketList.addEventListener('click', function (e) {
         basket = basket.filter(function (product, i) {
             return i !== index
         });
+
+        $basketListOpen.style.display = "none";
+        checkEmptyAndDrawOut();
         drawBasket();
     };
 });
@@ -125,7 +169,35 @@ $catalogList.addEventListener('click', function (e) {
         basket.push(new Basket(productName, price));
         $productNameInput.value = '';
         $priceInput.value = '';
+
+        $basketListOpen.style.display = "block";
+        checkEmptyAndDrawOut();
         drawBasket();
+    };
+});
+
+
+// Кнопки далее
+const $basketInfo = document.querySelector('#basket-info');
+$basketInfo.addEventListener('click', function (e) {
+    const $address = document.querySelector('#address');
+    const $comment = document.querySelector('#comments');
+    let id = e.target.dataset.toggleId;
+
+    if (id === 'basket-next-btn') {
+        $basketList.style.display = 'none';
+        $toAddressNextBtn.style.display = 'none';
+        $address.style.display = 'block';
+        $basketListOpen.style.display = 'block';
+    };
+    if (id === 'address-next-btn') {
+        $address.style.display = 'none';
+        $comment.style.display = 'block';
+    };
+    if (id === 'comment-pay-order-btn') {
+        $comment.style.display = 'none';
+        $popup.style.display = 'none';
+        $basketListClose.style.display = 'none';
     };
 });
 

@@ -19,8 +19,26 @@
             <div id="catalog-list" class="catalog-list"></div>
 
             <h2>Корзина</h2>
-            <div id="basket-list" class="basket-list"></div>
+            <div id="basket-list-open" class="basket-list-open"><button>Раскрыть корзину</button></div>
+            <div id="popup" class="popup" style="display: none;">
+                <div id="basket-list-close" class="basket-list-close"><button>Скрыть</button></div>
+                <div id="basket-info" class="basket-info">
+                    <div id="basket-list" class="basket-list"></div>
+                    <button data-toggle-id="basket-next-btn" id="basket-next-btn" class="basket-next-btn">Далее</button>
+                    <div id="address" class="address">
+                        <p>Адрес:</p>
+                        <input type="text" placeholder="Введите адрес">
+                        <button data-toggle-id="address-next-btn" id="address-next-btn">Далее</button>
+                    </div>
+                    <div id="comments" class="comments">
+                        <p>Комментарий:</p>
+                        <input type="text" placeholder="Введите комментарий">
+                        <button data-toggle-id="comment-pay-order-btn" id="comment-pay-order-btn">Оплата заказа</button>
+                    </div>
+                </div>
+            </div>
             <div id="basket-out" class="basket-out"></div>
+
         </main>
         <div class="br"></div>
         <footer>
