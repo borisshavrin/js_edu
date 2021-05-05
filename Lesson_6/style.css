@@ -80,3 +80,25 @@ h2 {
 footer {
     margin-left: 20px;
 }
+
+.basket-list {
+    display: flex;
+    display: none;
+    flex-direction: column;
+}
+
+.basket-list-close, .basket-list-open, .comments, .address, .basket-next-btn {
+    display: none;
+    margin-left: 10px;
+};
+
+.popup {
+    width: 700px;
+    height: 500px;
+    background-color: #ccc;
+    border: 1px solid #999;
+    border-radius: 6px;
+    position: fixed;
+    top: 100px;
+    left: calc(50% - 350px);
+};
